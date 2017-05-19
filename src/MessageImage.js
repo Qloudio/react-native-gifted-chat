@@ -3,18 +3,35 @@ import {
   Image,
   StyleSheet,
   View,
+  TouchableOpacity
 } from 'react-native';
 
 export default class MessageImage extends React.Component {
   render() {
-    return (
-      <View style={[styles.container, this.props.containerStyle]}>
-        <Image
-          style={[styles.image, this.props.imageStyle]}
-          source={{uri: this.props.currentMessage.image}}
-        />
-      </View>
-    );
+    if(this.props.currentMessage.imageLink){
+      return (
+        <View style={[styles.container, this.props.containerStyle]}>
+          <TouchableOpacity onPress={() => {
+            if(this.props._onImageLinkPress)
+              this.props._onImageLinkPress(this.props)
+          } }>
+            <Image
+              style={[styles.image, this.props.imageStyle]}
+              source={{uri: this.props.currentMessage.image}}
+            />
+          </TouchableOpacity>
+        </View>
+      );
+    }else{
+      return (
+        <View style={[styles.container, this.props.containerStyle]}>
+          <Image
+            style={[styles.image, this.props.imageStyle]}
+            source={{uri: this.props.currentMessage.image}}
+          />
+        </View>
+      );
+    }
   }
 }
 
