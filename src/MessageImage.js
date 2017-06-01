@@ -8,32 +8,29 @@ import {
 
 export default class MessageImage extends React.Component {
   render() {
-    if(this.props.currentMessage.imageLink){
-      return (
-        <View style={[styles.container, this.props.containerStyle]}>
-          <TouchableOpacity onPress={() => {
-            if(this.props._onImageLinkPress)
-              this.props._onImageLinkPress(this.props)
-          } }>
-            <Image
-              {...this.props.imageProps}
-              style={[styles.image, this.props.imageStyle]}
-              source={{uri: this.props.currentMessage.image}}
-            />
-          </TouchableOpacity>
-        </View>
-      );
-    }else{
-      return (
-        <View style={[styles.container, this.props.containerStyle]}>
-          <Image
-            {...this.props.imageProps}
-            style={[styles.image, this.props.imageStyle]}
-            source={{uri: this.props.currentMessage.image}}
-          />
-        </View>
-      );
-    }
+    let images = this.props.currentMessage.image
+    if('string' === typeof images) images = [images]
+    if(!(images instanceof Array)) return null
+    return (
+      <View>
+      {
+        images.map((image, pos) => (
+          <View key={`img_${pos}`} style={[styles.container, this.props.containerStyle]}>
+            <TouchableOpacity onPress={() => {
+              if(this.props._onImageLinkPress)
+                this.props._onImageLinkPress(this.props, image)
+            } }>
+              <Image
+                {...this.props.imageProps}
+                style={[styles.image, this.props.imageStyle]}
+                source={{uri: image}}
+              />
+            </TouchableOpacity>
+          </View>
+        ))
+      }
+      </View>
+    )
   }
 }
 
